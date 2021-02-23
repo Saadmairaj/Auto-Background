@@ -1,4 +1,3 @@
-import os
 import time
 import utils
 import datetime
@@ -15,7 +14,6 @@ class AppFunctions:
     @utils.threaded
     def change_wallpaper(self):
         while self.b2['state'] != 'disabled':
-            print('going on', self.focus_get(), self._sleep_time)
             with utils.download_image(self.imageslink.download_link(True), True) as img:
                 utils.change_background_image(img.filename)
                 # Deleting the image is not working so this is

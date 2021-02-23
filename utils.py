@@ -19,7 +19,9 @@ def change_background_image(file):
 
 
 def threaded(arg):
-    """To use as decorator to make a function call threaded.
+    """Thread decorator.
+
+    To use as decorator to make a function call threaded, 
     takes function as argument. To join=True pass @threaded(True)."""
     kw = {}
 
@@ -48,6 +50,9 @@ class download_image:
     previous_filename = []
 
     def __init__(self, link, save=False, save_path='./images'):
+        """Image downloader. 
+        
+        Downloads and save the image if the parameter `save=True`."""
         self.save = save
         self.filename = os.path.join('./.tmpimage.jpg')
         if save:
@@ -63,15 +68,19 @@ class download_image:
         self.link = link
 
     def delete_previous(self):
-        if self.previous_filename and os.path.exists(self.previous_filename[0]):
+        """Deletes the previous downloaded saved image."""
+        if self.previous_filename and os.path.exists(
+                self.previous_filename[0]):
             os.remove(self.previous_filename.pop(0))
 
     def __enter__(self):
+        """Downloads the image from the url on enter."""
         self.filename = os.path.realpath(
             urlretrieve(self.link, self.filename)[0])
         return self
 
     def __exit__(self, *args, **kwargs):
+        """Removes the image if save=False."""
         if not self.save:
             os.remove(self.filename)
         self.previous_filename.append(self.filename)
@@ -93,6 +102,11 @@ class ImageLink:
     def __init__(self, timeout=5, scroll_time=0.5, pages=-1,
                  refresh_timer=5000, fetch_start_callback=None,
                  fetch_end_callback=None):
+        """Image links class.
+        
+        Fetches all images links and save them in queue which 
+        makes them thread safe and can be used together with 
+        tkinter-threading."""
 
         self._queue = Queue()
         self._categories = {}
@@ -110,8 +124,9 @@ class ImageLink:
         self._driver = self._create_driver(1, keep_alive=True)
         self._fetch_links(self.LINK)
 
-    # @threaded
-    def _create_driver(self, headless=True, keep_alive=False):
+    @staticmethod
+    def _create_driver(headless=True, keep_alive=False):
+        """Create Chrome driver."""
         install()   # checks for chromedriver
         op = webdriver.ChromeOptions()  # Chrome Options
         # Disable images
@@ -139,7 +154,6 @@ class ImageLink:
         one_page_height = page_height/2
 
         while self.pages and not self._stop_fetching:
-            print('fetching')
             height = self._driver.execute_script(
                 "return document.body.scrollHeight") - one_page_height
             self._driver.execute_script(
@@ -163,7 +177,6 @@ class ImageLink:
 
     @threaded
     def _fetch_links(self, *links):
-        "pages = -1 means all pages."
         if self._fetching and not links:
             return
 
