@@ -22,7 +22,8 @@ def threaded(arg):
     """Thread decorator.
 
     To use as decorator to make a function call threaded, 
-    takes function as argument. To join=True pass @threaded(True)."""
+    takes function as argument. To join=True pass @threaded(True).
+    """
     kw = {}
 
     def wrapper(*args, **kwargs):
@@ -51,8 +52,9 @@ class download_image:
 
     def __init__(self, link, save=False, save_path='./images'):
         """Image downloader. 
-        
-        Downloads and save the image if the parameter `save=True`."""
+
+        Downloads and save the image if the parameter `save=True`.
+        """
         self.save = save
         self.filename = os.path.join('./.tmpimage.jpg')
         if save:
@@ -88,6 +90,7 @@ class download_image:
 
 class Queue(queue.Queue):
     def __contains__(self, item):
+        """Checks if the item present in the sequence."""
         with self.mutex:
             return item in self.queue
 
@@ -103,10 +106,11 @@ class ImageLink:
                  refresh_timer=5000, fetch_start_callback=None,
                  fetch_end_callback=None):
         """Image links class.
-        
+
         Fetches all images links and save them in queue which 
         makes them thread safe and can be used together with 
-        tkinter-threading."""
+        tkinter-threading.
+        """
 
         self._queue = Queue()
         self._categories = {}
