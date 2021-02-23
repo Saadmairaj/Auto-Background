@@ -1,0 +1,9 @@
+appscript==1.1.2
+autopep8==1.5.5
+chromedriver-autoinstaller==0.2.2
+colour==0.1.5
+pycodestyle==2.6.0
+selenium==3.141.0
+tkmacosx==1.0.0
+toml==0.10.2
+urllib3==1.26.3
